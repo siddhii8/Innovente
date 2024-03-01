@@ -3,6 +3,7 @@ package com.innoventes.test.app.controller;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.validation.Valid;
 
@@ -11,14 +12,7 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.innoventes.test.app.dto.CompanyDTO;
@@ -39,7 +33,15 @@ public class CompanyController {
 
 	@Autowired
 	private MessageSource messageSource;
-
+    @GetMapping("/{companyId}")
+	public ResponseEntity<CompanyDTO> getCompanyById(@PathVariable Long companyId){
+		CompanyDTO companyDto=companyService.getCompanyById(companyId);
+		if(companyDto!= null){
+			return new ResponseEntity<>(companyDto, HttpStatus.OK);
+		}else{
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+	}
 	@GetMapping("/companies")
 	public ResponseEntity<List<CompanyDTO>> getAllCompanies() {
 		List<Company> companyList = companyService.getAllCompanies();
@@ -87,4 +89,36 @@ public class CompanyController {
 		return messageSource.getMessage(exceptionCode, null, LocaleContextHolder.getLocale());
 	}
 
+	@GetMapping("/code/{companyCode}")
+	public ResponseEntity<CompanyDTO> getCompanyByCode(@PathVariable String companyCode){
+
+		CompanyDTO companyDto=companyService.getCompanyByCode(companyCode);
+		if(companyDto!= null){
+			return new ResponseEntity<>(companyDto, HttpStatus.OK);
+		}else{
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+	}
+	@PatchMapping("/company/{companyId}")
+	public ResponseEntity<?> updateCompany(@PathVariable Long companyId, @io.swagger.v3.oas.annotations.parameters.RequestBody Map<String, Object> update) {
+		Company company = companyService.findById(companyId);
+		if (company == null) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Company Not Found");
+		}
+		for (Map.Entry<String,Object>entry: update.entrySet()){
+		String filed = entry.getKey();
+		Object value = entry.getValue();
+		if(filed.equals("name")) {
+			String name = (String) value;
+			if (name.length() < 3 || name.length() > 50) {
+				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid name Length");
+
+			}
+			company.setName(name);
+		}else if (filed.equals("founded_year")){
+			int foundYear= (int) value;
+			if(foundYear<1900 || found)
+		}
+		}
+	}
 }

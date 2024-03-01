@@ -55,4 +55,10 @@ public class Company extends BaseEntity {
 
 	public void setName(String name) {
 	}
+
+	public void setFoundedYear(int foundYear) {
+	}
+
+	public void setEmployeeCount(int employeeCount) {
+	}
 }

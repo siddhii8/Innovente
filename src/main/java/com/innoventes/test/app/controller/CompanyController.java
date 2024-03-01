@@ -120,9 +120,23 @@ public class CompanyController {
 				company.setName(name);
 			} else if (filed.equals("founded_year")) {
 				int foundYear = (int) value;
+				if(foundYear< 1900 || foundYear > 2022 ){
+					return  ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid founded year");
+
+				}
+				company.setFoundedYear(foundYear);
+
+			} else if (filed.equals("employee_count")) {
+				int employeeCount = (int) value;
+				if (employeeCount<0 || employeeCount>100000){
+					return  ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid employee count");
+				}
+				company.setEmployeeCount(employeeCount);
 
 			}
-		}return null;
+		}
+		companyService.save(company);
+		return ResponseEntity.ok("comapany record updated successfullyy");
 	}
 }
 

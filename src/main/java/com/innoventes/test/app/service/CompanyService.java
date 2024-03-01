@@ -21,4 +21,6 @@ public interface CompanyService {
 	CompanyDTO getCompanyByCode(String companyCode);
 
     Company findById(Long companyId);
+
+	void save(Company company);
 }

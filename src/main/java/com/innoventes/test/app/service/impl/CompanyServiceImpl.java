@@ -76,6 +76,11 @@ public class CompanyServiceImpl implements CompanyService {
 		}
 	}
 
+	@Override
+	public Company findById(Long companyId) {
+		return null;
+	}
+
 	private CompanyDTO mapCompanyToDto(Company company){
 		CompanyDTO companyDTO = new CompanyDTO();
 		return companyDTO;

@@ -33,21 +33,23 @@ public class CompanyController {
 
 	@Autowired
 	private MessageSource messageSource;
-    @GetMapping("/{companyId}")
-	public ResponseEntity<CompanyDTO> getCompanyById(@PathVariable Long companyId){
-		CompanyDTO companyDto=companyService.getCompanyById(companyId);
-		if(companyDto!= null){
+
+	@GetMapping("/{companyId}")
+	public ResponseEntity<CompanyDTO> getCompanyById(@PathVariable Long companyId) {
+		CompanyDTO companyDto = companyService.getCompanyById(companyId);
+		if (companyDto != null) {
 			return new ResponseEntity<>(companyDto, HttpStatus.OK);
-		}else{
+		} else {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 	}
+
 	@GetMapping("/companies")
 	public ResponseEntity<List<CompanyDTO>> getAllCompanies() {
 		List<Company> companyList = companyService.getAllCompanies();
-		
+
 		List<CompanyDTO> companyDTOList = new ArrayList<CompanyDTO>();
-		
+
 		for (Company entity : companyList) {
 			companyDTOList.add(companyMapper.getCompanyDTO(entity));
 		}
@@ -70,7 +72,7 @@ public class CompanyController {
 
 	@PutMapping(value = "/companies/{id}")
 	public ResponseEntity<CompanyDTO> updateCompany(@PathVariable(value = "id") Long id,
-			@Valid @RequestBody CompanyDTO companyDTO) throws ValidationException {
+													@Valid @RequestBody CompanyDTO companyDTO) throws ValidationException {
 		Company company = companyMapper.getCompany(companyDTO);
 		Company updatedCompany = companyService.updateCompany(id, company);
 		CompanyDTO updatedCompanyDTO = companyMapper.getCompanyDTO(updatedCompany);
@@ -90,35 +92,38 @@ public class CompanyController {
 	}
 
 	@GetMapping("/code/{companyCode}")
-	public ResponseEntity<CompanyDTO> getCompanyByCode(@PathVariable String companyCode){
+	public ResponseEntity<CompanyDTO> getCompanyByCode(@PathVariable String companyCode) {
 
-		CompanyDTO companyDto=companyService.getCompanyByCode(companyCode);
-		if(companyDto!= null){
+		CompanyDTO companyDto = companyService.getCompanyByCode(companyCode);
+		if (companyDto != null) {
 			return new ResponseEntity<>(companyDto, HttpStatus.OK);
-		}else{
+		} else {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 	}
+
 	@PatchMapping("/company/{companyId}")
 	public ResponseEntity<?> updateCompany(@PathVariable Long companyId, @io.swagger.v3.oas.annotations.parameters.RequestBody Map<String, Object> update) {
 		Company company = companyService.findById(companyId);
 		if (company == null) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Company Not Found");
 		}
-		for (Map.Entry<String,Object>entry: update.entrySet()){
-		String filed = entry.getKey();
-		Object value = entry.getValue();
-		if(filed.equals("name")) {
-			String name = (String) value;
-			if (name.length() < 3 || name.length() > 50) {
-				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid name Length");
+		for (Map.Entry<String, Object> entry : update.entrySet()) {
+			String filed = entry.getKey();
+			Object value = entry.getValue();
+			if (filed.equals("name")) {
+				String name = (String) value;
+				if (name.length() < 3 || name.length() > 50) {
+					return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid name Length");
+
+				}
+				company.setName(name);
+			} else if (filed.equals("founded_year")) {
+				int foundYear = (int) value;
 
 			}
-			company.setName(name);
-		}else if (filed.equals("founded_year")){
-			int foundYear= (int) value;
-			if(foundYear<1900 || found)
-		}
-		}
+		}return null;
 	}
 }
+
+

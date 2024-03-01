@@ -31,4 +31,6 @@ public class CompanyDTO {
 	private String webSiteURL;
 	@Pattern(regexp = "^[a-zA-Z]{2}\\d{2}[EN]$", message = "Invalid company code format")
 	private String companyCode;
+
+
 }

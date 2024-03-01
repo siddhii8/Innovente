@@ -25,6 +25,7 @@ public class CompanyServiceImpl implements CompanyService {
 	@Autowired
 	private ServiceHelper serviceHelper;
 
+	String temp ="company";
 	@Override
 	public List<Company> getAllCompanies() {
 		ArrayList<Company> companyList = new ArrayList<Company>();
